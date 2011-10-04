@@ -1,0 +1,11 @@
+<package project="Mer:Trunk:Base" name="deltarpm">
+  <title>Create deltas between rpms</title>
+  <description>A deltarpm contains the difference between an old
+and a new version of a rpm, which makes it possible
+to recreate the new rpm from the deltarpm and the old
+one. You don't have to have a copy of the old rpm,
+deltarpms can also work with installed rpms.
+
+</description>
+  <url>http://gitorious.org/deltarpm/deltarpm</url>
+</package>
