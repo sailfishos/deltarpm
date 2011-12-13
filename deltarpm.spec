@@ -15,7 +15,7 @@ URL: http://gitorious.org/deltarpm/deltarpm
 Source: %{name}-git-20090913.tar.bz2
 # Build with system zlib
 Patch0: deltarpm-system-zlib.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Patch1: deltarpm-git-20090913-rpmio.patch
 
 BuildRequires: bzip2-devel, xz-devel, rpm-devel, popt-devel
 BuildRequires: zlib-devel
@@ -55,6 +55,7 @@ This package contains python bindings for deltarpm.
 %setup -q -n %{name}-git-20090913
 # Build with system zlib
 %patch0 -p1 -b .zlib
+%patch1 -p1
 
 %build
 %{__make} %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS" \

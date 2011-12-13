@@ -1,0 +1,22 @@
+diff -ru deltarpm-git-20090913/Makefile deltarpm-git-20090913-rpmio/Makefile
+--- deltarpm-git-20090913/Makefile	2011-12-13 09:41:34.740279895 +0100
++++ deltarpm-git-20090913-rpmio/Makefile	2011-12-13 09:44:12.549017724 +0100
+@@ -9,7 +9,7 @@
+ zlibcppflags=-I$(zlibdir)
+ CFLAGS = -fPIC -O2 -Wall -g
+ CPPFLAGS = -fPIC -DDELTARPM_64BIT -DBSDIFF_NO_SUF -DRPMDUMPHEADER=\"$(rpmdumpheader)\" $(zlibcppflags)
+-LDLIBS = -lbz2 $(zlibldflags) -llzma
++LDLIBS = -lbz2 $(zlibldflags) -llzma 
+ LDFLAGS =
+ PYTHONVERS = $(shell ls /usr/include/python*/Python.h | sed "s|/usr/include/||g"| sed "s|/Python.h||g")
+ 
+@@ -24,7 +24,7 @@
+ combinedeltarpm: combinedeltarpm.o md5.o util.o rpmhead.o cfile.o readdeltarpm.o writedeltarpm.o $(zlibbundled)
+ 
+ rpmdumpheader: rpmdumpheader.o
+-	$(CC) $(LDFLAGS) $^ -lrpm -o $@
++	$(CC) $(LDFLAGS) $^ -lrpm -lrpmio -o $@
+ 
+ makedeltaiso: makedeltaiso.o delta.o rpmoffs.o rpmhead.o util.o md5.o cfile.o $(zlibbundled)
+ 
+Only in deltarpm-git-20090913-rpmio: Makefile~
