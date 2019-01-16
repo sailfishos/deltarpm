@@ -3,7 +3,7 @@
 Summary: Create deltas between rpms
 Name: deltarpm
 Version: 3.5
-Release: 1
+Release: 2
 License: BSD
 Group: System/Base
 URL: http://gitorious.org/deltarpm/deltarpm
@@ -51,6 +51,14 @@ Requires: deltarpm = %{version}-%{release}
 %description -n python-deltarpm
 This package contains python bindings for deltarpm.
 
+%package doc
+Summary:   Documentation for %{name}
+Group:     Documentation
+Requires:  %{name} = %{version}-%{release}
+
+%description doc
+Man and info pages for %{name}.
+
 %prep
 %setup -q -n %{name}-git-20090913
 # Build with system zlib
@@ -70,15 +78,15 @@ This package contains python bindings for deltarpm.
 %{__rm} -rf %{buildroot}
 %makeinstall
 
+mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
+install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
+
 %clean
 %{__rm} -rf %{buildroot}
 
 %files
 %defattr(-, root, root, 0755)
-%doc LICENSE.BSD README
-%doc %{_mandir}/man8/applydeltarpm*
-%doc %{_mandir}/man8/makedeltarpm*
-%doc %{_mandir}/man8/combinedeltarpm*
+%license LICENSE.BSD
 %{_bindir}/applydeltarpm
 %{_bindir}/combinedeltarpm
 %{_bindir}/makedeltarpm
@@ -86,21 +94,22 @@ This package contains python bindings for deltarpm.
 
 %files -n deltaiso
 %defattr(-, root, root, 0755)
-%doc LICENSE.BSD README
-%doc %{_mandir}/man8/applydeltaiso*
-%doc %{_mandir}/man8/makedeltaiso*
+%license LICENSE.BSD
 %{_bindir}/applydeltaiso
 %{_bindir}/fragiso
 %{_bindir}/makedeltaiso
 
 %files -n drpmsync
 %defattr(-, root, root, 0755)
-%doc LICENSE.BSD README
-%doc %{_mandir}/man8/drpmsync*
+%license LICENSE.BSD
 %{_bindir}/drpmsync
 
 %files -n python-deltarpm
 %defattr(-, root, root, 0755)
-%doc LICENSE.BSD
+%license LICENSE.BSD
 %{python_sitearch}/*
 
+%files doc
+%defattr(-,root,root,-)
+%{_mandir}/man8/*.*
+%{_docdir}/%{name}-%{version}
