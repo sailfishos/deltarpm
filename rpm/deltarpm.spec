@@ -2,24 +2,18 @@
 
 Summary: Create deltas between rpms
 Name: deltarpm
-Version: 3.5
-Release: 2
+Version: 3.6.2
+Release: 1
 License: BSD
 Group: System/Base
-URL: http://gitorious.org/deltarpm/deltarpm
-# Generate source by doing:
-# git clone git://gitorious.org/deltarpm/deltarpm
-# cd deltarpm
-# git archive --format=tar --prefix="deltarpm-git-20090913" f716bb7 | \
-# bzip2 > deltarpm-git-20090831.1.tar.bz2
-Source: %{name}-git-20090913.tar.bz2
-# Build with system zlib
-Patch0: deltarpm-system-zlib.patch
-Patch1: deltarpm-git-20090913-rpmio.patch
-
-BuildRequires: bzip2-devel, xz-devel, rpm-devel, popt-devel
-BuildRequires: zlib-devel
-BuildRequires: python-devel
+URL: https://github.com/rpm-software-management/deltarpm
+Source: %{name}-%{version}.tar.bz2
+Patch0: 0001-Do-not-build-with-zstd.-Set-prefix-to-usr.patch
+BuildRequires: bzip2-devel, xz-devel
+BuildRequires: pkgconfig(zlib)
+BuildRequires: pkgconfig(rpm)
+BuildRequires: pkgconfig(popt)
+BuildRequires: python3-devel
 
 %description
 A deltarpm contains the difference between an old
@@ -60,12 +54,10 @@ Requires:  %{name} = %{version}-%{release}
 Man and info pages for %{name}.
 
 %prep
-%setup -q -n %{name}-git-20090913
-# Build with system zlib
-%patch0 -p1 -b .zlib
-%patch1 -p1
+%autosetup -n %{name}-%{version}/deltarpm -p1
 
 %build
+export PYTHONS=python3
 %{__make} %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS" \
     bindir=%{_bindir} libdir=%{_libdir} mandir=%{_mandir} prefix=%{_prefix} \
     zlibbundled='' zlibldflags='-lz' zlibcppflags=''
@@ -76,7 +68,8 @@ Man and info pages for %{name}.
 
 %install
 %{__rm} -rf %{buildroot}
-%makeinstall
+export PYTHONS=python3
+%{__make} DESTDIR=%{buildroot} INSTALL_ROOT=%{buildroot} mandir=%{_mandir} install
 
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
 install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
