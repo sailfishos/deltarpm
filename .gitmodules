@@ -1,3 +1,3 @@
 [submodule "deltarpm"]
 	path = deltarpm
-	url = https://git.merproject.org/mirror/deltarpm
+	url = https://git.sailfishos.org/mirror/deltarpm

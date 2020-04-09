@@ -1,11 +1,11 @@
-%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+# fixme: should be defined in base system side
+%define python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
 
 Summary: Create deltas between rpms
 Name: deltarpm
 Version: 3.6.2
 Release: 1
 License: BSD
-Group: System/Base
 URL: https://github.com/rpm-software-management/deltarpm
 Source: %{name}-%{version}.tar.bz2
 Patch0: 0001-Do-not-build-with-zstd.-Set-prefix-to-usr.patch
@@ -38,16 +38,15 @@ Requires: deltarpm = %{version}-%{release}
 This package contains tools for creating and using deltasisos,
 a difference between an old and a new iso containing rpms.
 
-%package -n python-deltarpm
+%package -n python3-%{name}
 Summary: Python bindings for deltarpm
 Requires: deltarpm = %{version}-%{release}
 
-%description -n python-deltarpm
+%description -n python3-%{name}
 This package contains python bindings for deltarpm.
 
 %package doc
 Summary:   Documentation for %{name}
-Group:     Documentation
 Requires:  %{name} = %{version}-%{release}
 
 %description doc
@@ -97,10 +96,12 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
 %license LICENSE.BSD
 %{_bindir}/drpmsync
 
-%files -n python-deltarpm
+%files -n python3-%{name}
 %defattr(-, root, root, 0755)
 %license LICENSE.BSD
-%{python_sitearch}/*
+%{python3_sitearch}/%{name}.py
+%{python3_sitearch}/_%{name}module.so
+%{python3_sitearch}/__pycache__/*
 
 %files doc
 %defattr(-,root,root,-)
