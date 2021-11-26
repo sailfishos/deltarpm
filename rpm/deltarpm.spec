@@ -3,17 +3,17 @@
 
 Summary: Create deltas between rpms
 Name: deltarpm
-Version: 3.6.2
+Version: 3.6.3
 Release: 1
 License: BSD
 URL: https://github.com/rpm-software-management/deltarpm
 Source: %{name}-%{version}.tar.bz2
-Patch0: 0001-Do-not-build-with-zstd.-Set-prefix-to-usr.patch
 BuildRequires: bzip2-devel, xz-devel
 BuildRequires: pkgconfig(zlib)
 BuildRequires: pkgconfig(rpm)
 BuildRequires: pkgconfig(popt)
-BuildRequires: python3-devel
+BuildRequires: pkgconfig(python3)
+BuildRequires: pkgconfig(libzstd)
 
 %description
 A deltarpm contains the difference between an old
@@ -57,24 +57,20 @@ Man and info pages for %{name}.
 
 %build
 export PYTHONS=python3
-%{__make} %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS" \
-    bindir=%{_bindir} libdir=%{_libdir} mandir=%{_mandir} prefix=%{_prefix} \
-    zlibbundled='' zlibldflags='-lz' zlibcppflags=''
-%{__make} %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS" \
+%{__make} %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -DWITH_ZSTD=1" \
     bindir=%{_bindir} libdir=%{_libdir} mandir=%{_mandir} prefix=%{_prefix} \
     zlibbundled='' zlibldflags='-lz' zlibcppflags='' \
-    python
+    all python
 
 %install
 %{__rm} -rf %{buildroot}
 export PYTHONS=python3
-%{__make} DESTDIR=%{buildroot} INSTALL_ROOT=%{buildroot} mandir=%{_mandir} install
+%{__make} DESTDIR=%{buildroot} INSTALL_ROOT=%{buildroot} \
+    prefix="%{_prefix}" libdir="%{_libdir}" mandir=%{_mandir} \
+    install
 
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
 install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
-
-%clean
-%{__rm} -rf %{buildroot}
 
 %files
 %defattr(-, root, root, 0755)
